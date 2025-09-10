@@ -32,7 +32,7 @@ export class Component {
   @Column({ nullable: true })
   price: number;
 
-  @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP', precision: 0 })
   created_at: Date;
 
   @UpdateDateColumn({

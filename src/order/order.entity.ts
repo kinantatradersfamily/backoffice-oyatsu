@@ -29,7 +29,7 @@ export class Order {
   @Column({ type: 'text', nullable: true })
   document: string | null;
 
-  @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP', precision: 0 })
   created_at: Date;
 
   @UpdateDateColumn({
