@@ -10,11 +10,11 @@ import { OrderModule } from './order/order.module';
   imports: [
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: 'localhost',
-      port: 3306,
-      username: 'root',
-      password: '1234',
-      database: 'oyatsu',
+      host: process.env.DB_HOST || 'localhost',
+      port: Number(process.env.DB_PORT) || 3306,
+      username: process.env.DB_USER || 'root',
+      password: process.env.DB_PASS || '1234',
+      database: process.env.DB_NAME || 'oyatsu',
       autoLoadEntities: true,
       synchronize: true,
     }),
