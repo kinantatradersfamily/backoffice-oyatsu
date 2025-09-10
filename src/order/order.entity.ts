@@ -35,6 +35,7 @@ export class Order {
   @UpdateDateColumn({
     type: 'timestamp',
     nullable: true,
+    precision: 0,
     onUpdate: 'CURRENT_TIMESTAMP',
   })
   updated_at: Date;
