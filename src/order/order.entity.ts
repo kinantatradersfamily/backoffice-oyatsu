@@ -36,6 +36,7 @@ export class Order {
     type: 'timestamp',
     nullable: true,
     precision: 0,
+    default: () => 'CURRENT_TIMESTAMP',
     onUpdate: 'CURRENT_TIMESTAMP',
   })
   updated_at: Date;
