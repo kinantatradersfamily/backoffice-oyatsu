@@ -16,7 +16,7 @@ import { diskStorage } from 'multer';
 
 @Controller('component')
 export class CreateComponentController {
-  constructor(private readonly service: componentService) {}
+  constructor(private readonly service: componentService) { }
 
   @Post(':year/:month')
   @UseInterceptors(
@@ -54,10 +54,32 @@ export class CreateComponentController {
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() dto: Partial<Component>) {
-    return this.service.update(parseInt(id, 10), dto);
-  }
+  @UseInterceptors(
+    FilesInterceptor('images', 10, {
+      storage: diskStorage({
+        destination: './uploads',
+        filename: (_req, file, cb) => {
+          const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+          cb(null, uniqueSuffix + '-' + file.originalname);
+        },
+      }),
+    }),
+  )
 
+  async update(
+    @Param('id') id: string,
+    @Body() body: any,
+    @UploadedFiles() files: Express.Multer.File[],
+  ) {
+
+    if (files[0]) {
+      body.image = `/uploads/${files[0].filename}`;
+    }
+
+    if (body.price) body.price = +body.price; // convert string ke number
+
+    return this.service.update(+id, body);
+  }
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.service.remove(parseInt(id, 10));
