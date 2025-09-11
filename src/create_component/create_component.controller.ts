@@ -76,7 +76,7 @@ export class CreateComponentController {
       body.image = `/uploads/${files[0].filename}`;
     }
 
-    if (body.price) body.price = +body.price; // convert string ke number
+    if (body.price) body.price = +body.price;
 
     return this.service.update(+id, body);
   }

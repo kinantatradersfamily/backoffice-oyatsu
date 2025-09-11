@@ -23,6 +23,9 @@ export class Order {
   @Column({ nullable: true })
   phone: string;
 
+  @Column({ nullable: true })
+  status: number;
+
   @Column({ type: 'text', nullable: true })
   flavor: string | null;
 

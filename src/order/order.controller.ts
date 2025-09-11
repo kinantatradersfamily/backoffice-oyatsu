@@ -51,6 +51,11 @@ export class CreateOrderController {
     return this.service.getByYearMonth(parseInt(year, 10));
   }
 
+  @Get('by-email/:email')
+  async getByEmail(@Param('email') email: string) {
+    return this.service.findByEmail(email);
+  }
+
   @Put(':id')
   update(@Param('id') id: string, @Body() dto: Partial<Order>) {
     return this.service.update(parseInt(id, 10), dto);

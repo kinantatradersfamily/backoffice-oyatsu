@@ -16,7 +16,6 @@ export class OrderService {
     month: number,
     dtoArray: Partial<Order>[],
   ) {
-    
     const items = this.repo.create({ ...dtoArray, year, month });
     return await this.repo.save(items);
   }
@@ -24,11 +23,19 @@ export class OrderService {
   // READ
   async getByYearMonth(year: number) {
     const list = await this.repo.find({ where: { year } });
-    console.log(list);
+
+  let tempData = {};
+    list.forEach(item => {
+        if (!tempData[item.month]) {
+            tempData[item.month] = [];
+        }
+        tempData[item.month].push(item)
+    });
+
     return {
-      message: {
-        [year]: list,
-      },
+        message: {
+        [year]: tempData,
+        },
     };
   }
 
@@ -40,5 +47,10 @@ export class OrderService {
 
   async remove(id: number) {
     return this.repo.delete(id);
+  }
+  async findByEmail(email: string) {
+    return this.repo.find({
+      where: { email },
+    });
   }
 }

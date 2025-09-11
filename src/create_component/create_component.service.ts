@@ -5,6 +5,9 @@ import { Component } from './create_component.entity';
 
 @Injectable()
 export class componentService {
+  findOne(arg0: number) {
+    throw new Error('Method not implemented.');
+  }
   constructor(
     @InjectRepository(Component)
     private readonly repo: Repository<Component>,
