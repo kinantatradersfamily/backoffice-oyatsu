@@ -61,6 +61,11 @@ export class CreateOrderController {
     return this.service.update(parseInt(id, 10), dto);
   }
 
+  @Get('email/:email/history')
+  getHistoryByEmail(@Param('email') email: string) {
+    return this.service.getOrderHistoryByEmail(email);
+  }
+
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.service.remove(parseInt(id, 10));
