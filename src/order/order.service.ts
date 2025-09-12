@@ -63,7 +63,7 @@ export class OrderService {
       phone: oldOrder.phone,
       status: oldOrder.status,
       flavor: oldOrder.flavor,
-      saved_at: new Date(),
+      saved_at: oldOrder.status == 0 ? oldOrder.created_at : oldOrder.updated_at,
     });
 
     await this.repo.update(id, { ...dto, updated_at: new Date() });
