@@ -26,7 +26,7 @@ export class Order {
   @Column({ nullable: true })
   status: number;
 
-  @Column({ type: 'boolean', default: true })
+  @Column({ type: 'boolean', nullable: true })
   activated: boolean;
 
   @Column({ type: 'text', nullable: true })

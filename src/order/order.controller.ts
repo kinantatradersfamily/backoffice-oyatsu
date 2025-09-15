@@ -7,6 +7,8 @@ import {
   Post,
   Put,
   UploadedFiles,
+  ParseIntPipe,
+  ParseBoolPipe,
   UseInterceptors,
 } from '@nestjs/common';
 import { OrderService } from './order.service';
@@ -59,6 +61,14 @@ export class CreateOrderController {
   @Put(':id')
   update(@Param('id') id: string, @Body() dto: Partial<Order>) {
     return this.service.update(parseInt(id, 10), dto);
+  }
+
+  @Put(':id/activated')
+  updateActivated(
+    @Param('id', ParseIntPipe) id: number,
+    @Body('activated', ParseBoolPipe) activated: boolean,
+  ) {
+    return this.service.update(id, { activated });
   }
 
   @Get('email/:email/history')

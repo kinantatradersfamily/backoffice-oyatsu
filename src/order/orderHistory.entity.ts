@@ -23,6 +23,9 @@ export class OrderHistory {
   @Column({ nullable: true })
   status: number;
 
+  @Column({ type: 'boolean', nullable: true })
+  activated: boolean;
+
   @Column({ type: 'text', nullable: true })
   flavor: string | null;
 

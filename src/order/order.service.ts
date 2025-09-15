@@ -44,30 +44,36 @@ export class OrderService {
         },
     };
   }
+  
 
   // Update
   async update(id: number, dto: Partial<Order>) {
     const oldOrder = await this.findOne({ where: { id } });
     if (!oldOrder) throw new BadRequestException('Order not found');
+
     if (dto.status !== undefined && dto.status <= oldOrder.status) {
       throw new BadRequestException(
         `Status baru (${dto.status}) harus lebih besar dari status lama (${oldOrder.status})`,
       );
     }
 
-    await this.historyRepo.save({
-      orderId: oldOrder.id,
-      email: oldOrder.email,
-      year: oldOrder.year,
-      month: oldOrder.month,
-      phone: oldOrder.phone,
-      status: oldOrder.status,
-      flavor: oldOrder.flavor,
-      saved_at: oldOrder.status == 0 ? oldOrder.created_at : oldOrder.updated_at,
-    });
-
+    const isOnlyActivated =
+    Object.keys(dto).length === 1 && dto.hasOwnProperty('activated');
+    if (!isOnlyActivated) {
+      await this.historyRepo.save({
+        orderId: oldOrder.id,
+        email: oldOrder.email,
+        year: oldOrder.year,
+        month: oldOrder.month,
+        phone: oldOrder.phone,
+        status: oldOrder.status,
+        activated: oldOrder.activated,
+        flavor: oldOrder.flavor,
+        saved_at: oldOrder.status == 0 ? oldOrder.created_at : oldOrder.updated_at,
+      });
+    }
     await this.repo.update(id, { ...dto, updated_at: new Date() });
-    return true;
+    return { message: true };
   }
 
   async remove(id: number) {
@@ -88,6 +94,7 @@ export class OrderService {
       ...history.map((h) => ({
         id: h.orderId,
         status: h.status,
+        activated: h.activated,
         flavor: h.flavor ? JSON.parse(h.flavor) : [],
         email: h.email,
         phone: h.phone,
@@ -96,6 +103,7 @@ export class OrderService {
       ...current.map((o) => ({
         id: o.id,
         status: o.status,
+        activated: o.activated,
         flavor: o.flavor ? JSON.parse(o.flavor) : [],
         email: o.email,
         phone: o.phone,
