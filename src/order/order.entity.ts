@@ -26,6 +26,9 @@ export class Order {
   @Column({ nullable: true })
   status: number;
 
+  @Column({ type: 'boolean', default: true })
+  activated: boolean;
+
   @Column({ type: 'text', nullable: true })
   flavor: string | null;
 
