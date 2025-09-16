@@ -51,10 +51,26 @@ export class OrderService {
     const oldOrder = await this.findOne({ where: { id } });
     if (!oldOrder) throw new BadRequestException('Order not found');
 
-    if (dto.status !== undefined && dto.status <= oldOrder.status) {
-      throw new BadRequestException(
-        `Status baru (${dto.status}) harus lebih besar dari status lama (${oldOrder.status})`,
-      );
+    if (dto.status !== undefined) {
+      const newStatus = Number(dto.status);
+
+      if (isNaN(newStatus)) {
+        throw new BadRequestException(`Status tidak valid`);
+      }
+
+      if (newStatus <= oldOrder.status) {
+        throw new BadRequestException(
+          `Status baru (${newStatus}) harus lebih besar dari status lama (${oldOrder.status})`,
+        );
+      }
+
+      if (newStatus !== oldOrder.status + 1) {
+        throw new BadRequestException(
+          `Status harus naik bertahap. Status sekarang: ${oldOrder.status}, jadi hanya boleh ke ${oldOrder.status + 1}`,
+        );
+      }
+
+      dto.status = newStatus;
     }
 
     const isOnlyActivated =
